@@ -1,17 +1,19 @@
-traefik:
-  image: traefik:v2.9
-  container_name: tzs_traefik
-  command: --api.insecure=true --providers.docker
-  ports:
-    - "80:80"
-    - "8080:8080"
-    - "443:443"
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-  labels:
-    - "traefik.http.routers.traefik.rule=Host(`traefik.dndnew.hu`)"
-  networks:
-    - traefik-public
+version: "3.7"
+services:
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(`traefik.dndnew.hu`)"
+    networks:
+      - traefik-public
 networks:
   # Use the previously created public network "traefik-public", shared with other
   # services that need to be publicly available via this Traefik
