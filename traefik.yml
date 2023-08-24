@@ -3,15 +3,32 @@ services:
   traefik:
     image: traefik:v2.9
     container_name: traefik
-    command: --api.insecure=true --providers.docker
+    # command: --api.insecure=true --providers.docker
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      # - "--api.insecure=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=deutschgabor92@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
       - "8080:8080"
       - "443:443"
     volumes:
+      - ./letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.dndnew.hu`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=myresolver"
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$2y$10$hb7R.gObeJrz8zkPXq7V0O5Phbhrvd7jQtMFVYgtqYYMVZDZhQXSq"
     networks:
       - traefik-public
 networks:
