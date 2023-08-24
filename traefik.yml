@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$2a$12$wRsGWUOJWKPSj0c2djYiyOLL/eFo5ZFOPO9N9NAMLOtyBWH7cvMci"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:$$2a$$12$$wRsGWUOJWKPSj0c2djYiyOLL/eFo5ZFOPO9N9NAMLOtyBWH7cvMci"
     networks:
       - traefik-public
 networks:
